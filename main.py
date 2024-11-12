@@ -68,15 +68,33 @@ utilidad_promedio = np.mean(utilidades)
 utilidad_mediana = np.median(utilidades)
 probabilidad_perdida = np.sum(utilidades < 0) / n_simulaciones
 
-# Visualización de la distribución de la utilidad
+# Visualización de la distribución de la utilidad con área de pérdidas resaltada y porcentaje de pérdidas
+
 plt.figure(figsize=(12, 6))
-sns.histplot(utilidades, kde=True, color='blue', bins=50)
+
+# Graficamos la distribución de la utilidad
+sns.histplot(utilidades, kde=True, color='blue', bins=50, label="Distribución de Utilidad")
+
+# Resaltar el área de pérdidas (utilidad negativa)
+plt.fill_betweenx(y=[0, plt.gca().get_ylim()[1]], x1=-1e8, x2=0, color='red', alpha=0.3, label="Pérdidas")
+
+# Líneas de referencia para la media y mediana
 plt.axvline(utilidad_promedio, color='red', linestyle='--', label=f'Promedio: {utilidad_promedio:,.2f}')
 plt.axvline(utilidad_mediana, color='green', linestyle='--', label=f'Mediana: {utilidad_mediana:,.2f}')
-plt.title("Distribución de la Utilidad Simulada")
+
+# Agregar texto con el porcentaje de pérdidas
+plt.text(-0.8e8, plt.gca().get_ylim()[1]*0.8, f"{probabilidad_perdida*100:.2f}% de Pérdidas",
+         color="red", weight="bold", fontsize=12, bbox=dict(facecolor='white', alpha=0.7))
+
+# Etiquetas y leyenda
+plt.title("Distribución de la Utilidad Simulada con Visualización de Pérdidas")
 plt.xlabel("Utilidad en pesos")
 plt.ylabel("Frecuencia")
 plt.legend()
+
+# Mostrar gráfico
+plt.show()
+
 
 # Mostramos las métricas clave en pantalla
 utilidad_promedio, utilidad_mediana, probabilidad_perdida, plt.show()
