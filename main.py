@@ -9,7 +9,6 @@ costos_fijos = 240000000  # Costos fijos (administrativos y publicidad)
 
 # Distribuciones de las variables de entrada
 # Cada función simula una variable con las especificaciones dadas en el trabajo
-
 # Simulación del costo de mano de obra (distribución discreta)
 def generar_costo_mano_obra():
     return np.random.choice([10000, 13000, 16000, 19000, 22000], p=[0.1, 0.3, 0.3, 0.2, 0.1])
@@ -29,7 +28,6 @@ muestras_demanda = [max(0, generar_demanda()) for _ in range(10000)]  # Evitar v
 
 # Visualización de las distribuciones de las variables de entrada
 # Ajuste en la visualización de distribuciones de las variables de entrada
-
 fig, axs = plt.subplots(1, 3, figsize=(18, 5))
 
 # Distribución de Costo de Mano de Obra
@@ -82,6 +80,13 @@ probabilidad_perdida = np.sum(utilidades < 0) / n_simulaciones
 # Visualización de la distribución de la utilidad con área de pérdidas resaltada y porcentaje de pérdidas
 
 plt.figure(figsize=(12, 6))
+# Visualización de la distribución de la utilidad con métricas clave y casos extremos
+
+# Calcular el caso pesimista (mínima utilidad) y el caso optimista (máxima utilidad)
+utilidad_minima = np.min(utilidades)  # Caso pesimista
+utilidad_maxima = np.max(utilidades)  # Caso optimista
+
+plt.figure(figsize=(12, 6))
 
 # Graficamos la distribución de la utilidad
 sns.histplot(utilidades, kde=True, color='blue', bins=50, label="Distribución de Utilidad")
@@ -93,12 +98,19 @@ plt.fill_betweenx(y=[0, plt.gca().get_ylim()[1]], x1=-1e8, x2=0, color='red', al
 plt.axvline(utilidad_promedio, color='red', linestyle='--', label=f'Promedio: {utilidad_promedio:,.2f}')
 plt.axvline(utilidad_mediana, color='green', linestyle='--', label=f'Mediana: {utilidad_mediana:,.2f}')
 
-# Agregar texto con el porcentaje de pérdidas
-plt.text(-0.8e8, plt.gca().get_ylim()[1]*0.8, f"{probabilidad_perdida*100:.2f}% de Pérdidas",
-         color="red", weight="bold", fontsize=12, bbox=dict(facecolor='white', alpha=0.7))
+# Agregar líneas y anotaciones para el caso pesimista y optimista
+plt.axvline(utilidad_minima, color='purple', linestyle='--', label=f'Caso Pesimista: {utilidad_minima:,.2f}')
+plt.axvline(utilidad_maxima, color='orange', linestyle='--', label=f'Caso Optimista: {utilidad_maxima:,.2f}')
+
+# Cuadro de texto con las métricas clave
+plt.text(0.65e8, plt.gca().get_ylim()[1] * 0.8,
+         f"Promedio: {utilidad_promedio:,.2f}\nMediana: {utilidad_mediana:,.2f}\n"
+         f"Prob. de Pérdida: {probabilidad_perdida*100:.2f}%\n"
+         f"Optimista: {utilidad_maxima:,.2f}\nPesimista: {utilidad_minima:,.2f}",
+         fontsize=12, bbox=dict(facecolor='white', alpha=0.7))
 
 # Etiquetas y leyenda
-plt.title("Distribución de la Utilidad Simulada con Visualización de Pérdidas")
+plt.title("Distribución de la Utilidad Simulada con Casos Pesimista y Optimista")
 plt.xlabel("Utilidad en pesos")
 plt.ylabel("Frecuencia")
 plt.legend()
