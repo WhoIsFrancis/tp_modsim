@@ -20,7 +20,7 @@ def generar_costo_componentes():
 
 # Simulación de la demanda anual (distribución normal)
 def generar_demanda():
-    return np.random.normal(14500, 4000)
+    return np.clip(np.random.normal(14500, 4000), 9000, 28500)
 
 # Generamos muestras de cada variable para visualización de sus distribuciones
 muestras_costo_mano_obra = [generar_costo_mano_obra() for _ in range(10000)]
@@ -105,7 +105,6 @@ plt.legend()
 
 # Mostrar gráfico
 plt.show()
-
 
 # Mostramos las métricas clave en pantalla
 utilidad_promedio, utilidad_mediana, probabilidad_perdida, plt.show()
