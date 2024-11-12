@@ -28,19 +28,30 @@ muestras_costo_componentes = [generar_costo_componentes() for _ in range(10000)]
 muestras_demanda = [max(0, generar_demanda()) for _ in range(10000)]  # Evitar valores negativos en demanda
 
 # Visualización de las distribuciones de las variables de entrada
+# Ajuste en la visualización de distribuciones de las variables de entrada
+
 fig, axs = plt.subplots(1, 3, figsize=(18, 5))
-sns.histplot(muestras_costo_mano_obra, kde=False, color='skyblue', ax=axs[0])
-axs[0].set_title("Distribución del Costo de Mano de Obra")
-axs[0].set_xlabel("Costo de Mano de Obra por Unidad")
-axs[0].set_ylabel("Frecuencia")
 
-sns.histplot(muestras_costo_componentes, kde=True, color='salmon', ax=axs[1])
-axs[1].set_title("Distribución del Costo de Componentes")
-axs[1].set_xlabel("Costo de Componentes por Unidad")
+# Distribución de Costo de Mano de Obra
+sns.histplot(muestras_costo_mano_obra, kde=False, color='skyblue', edgecolor='black', ax=axs[0])
+axs[0].set_title("Distribución del Costo de Mano de Obra", fontsize=14)
+axs[0].set_xlabel("Costo de Mano de Obra por Unidad (pesos)", fontsize=12)
+axs[0].set_ylabel("Frecuencia", fontsize=12)
+axs[0].grid(axis='y', linestyle='--', alpha=0.7)
 
-sns.histplot(muestras_demanda, kde=True, color='lightgreen', ax=axs[2])
-axs[2].set_title("Distribución de la Demanda")
-axs[2].set_xlabel("Demanda Anual (Unidades)")
+# Distribución de Costo de Componentes
+sns.histplot(muestras_costo_componentes, kde=True, color='lightcoral', edgecolor='black', ax=axs[1])
+axs[1].set_title("Distribución del Costo de Componentes", fontsize=14)
+axs[1].set_xlabel("Costo de Componentes por Unidad (pesos)", fontsize=12)
+axs[1].grid(axis='y', linestyle='--', alpha=0.7)
+
+# Distribución de la Demanda
+sns.histplot(muestras_demanda, kde=True, color='lightgreen', edgecolor='black', ax=axs[2])
+axs[2].axvline(np.mean(muestras_demanda), color='darkgreen', linestyle='--', label="Media de Demanda")
+axs[2].set_title("Distribución de la Demanda Anual", fontsize=14)
+axs[2].set_xlabel("Demanda Anual (Unidades)", fontsize=12)
+axs[2].legend()
+axs[2].grid(axis='y', linestyle='--', alpha=0.7)
 
 plt.tight_layout()
 plt.show()
